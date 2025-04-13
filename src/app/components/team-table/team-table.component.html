@@ -1,0 +1,113 @@
+<!-- Spinner -->
+<div *ngIf="isLoading" class="spinner-container">
+  <div class="spinner"></div>
+  <p style="margin-top: 10px;">Loading data...</p>
+</div>
+<h2>Team Members</h2>
+<div class="team-table" *ngIf="!isLoading">
+    <table>
+      <thead>
+        <tr>
+            <th>
+                <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" />
+              </th>
+          <th *ngFor="let col of columns">{{ col.column_name }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hoverTr" *ngFor="let user of paginatedData">
+            <td>
+                <input
+                  type="checkbox"
+                  [(ngModel)]="user.selected"
+                  (change)="checkIfAllSelected()" />
+              </td>
+  
+          <ng-container *ngFor="let col of columns">
+            <td [ngSwitch]="col.type">
+              
+              <!-- Name -->
+              <ng-container *ngSwitchCase="'name'">
+                <div class="user-info">
+                  <div class="avatar">
+                    {{ getInitials(user[col.column_key]?.first_name, user[col.column_key]?.last_name) }}</div>
+                  <div>
+                    <div class="name">{{ user[col.column_key]?.first_name }} {{ user[col.column_key]?.last_name }}</div>
+                    <div class="handle">{{ user[col.column_key]?.handle }}</div>
+                  </div>
+                </div>
+              </ng-container>
+  
+              <!-- Status -->
+              <ng-container *ngSwitchCase="'status'">
+                <span class="status" [ngClass]="user[col.column_key]?.toLowerCase()">
+                  {{ user[col.column_key] }}
+                </span>
+              </ng-container>
+  
+              <!-- Text -->
+              <ng-container *ngSwitchCase="'text'">
+                {{ user[col.column_key] }}
+              </ng-container>
+  
+              <!-- Progress -->
+              <ng-container *ngSwitchCase="'progress'">
+                <div class="progress-wrap">
+                  <div class="bar">
+                    <div class="fill" [style.width.%]="user[col.column_key]"></div>
+                  </div>
+                  <div class="percent">{{ user[col.column_key] }}%</div>
+                </div>
+              </ng-container>
+  
+              <!-- Tags -->
+              <ng-container *ngSwitchCase="'tags'">
+                <div class="tags">
+                  <span class="tag" *ngFor="let tag of user[col.column_key]"
+                        [style.background-color]="tag.background_color"
+                        [style.color]="tag.text_color">
+                    {{ tag.value }}
+                  </span>
+                </div>
+              </ng-container>
+  
+            </td>
+          </ng-container>
+  
+          <!-- Actions -->
+          <td class="actions">
+            
+            <i class="fas fa-trash delete-icon" (click)="deleteUser(user.id)"></i>
+            <i class="fas fa-pen edit-icon" (click)="openModal(user)"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="pagination">
+        <button class="left" (click)="goToPreviousPage()" [disabled]="currentPage === 1">Previous</button>
+      
+        <div class="pages">
+          <button *ngFor="let page of totalPagesArray"
+                  (click)="goToPage(page)"
+                  [class.active]="page === currentPage">
+            {{ page }}
+          </button>
+        </div>
+      
+        <button class="right" (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next</button>
+      </div>
+ </div>
+  
+ <!-- Modal -->
+<div class="custom-modal" *ngIf="selectedUser" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h2>Edit User</h2>
+      <div class="editDiv">
+      <label class="nameLabel">Name:</label>
+      <input class="nameInput" type="text" value="{{ selectedUser.name.first_name }} {{ selectedUser.name.last_name }}"/> 
+      <button (click)="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+  

@@ -1,0 +1,65 @@
+<div class="dashboard-main">
+    <div class="chart-section">
+      <!-- Vendor Breakdown -->
+      <div class="chart-box">
+        <div class="chart-header">
+          <div class="left">
+            <div class="icon-circle">
+              <i class="fa-solid fa-cube"></i>
+            </div>
+            <div class="text">
+              <h4>Vendor breakdown</h4>
+              <p>Keep track of vendors and their security ratings.</p>
+             
+            </div>
+          </div>
+          <div class="menu-dots">
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+          </div>
+        </div>
+  
+        <highcharts-chart
+        [Highcharts]="Highcharts"
+        [options]="chartOptions"
+        class="custom-chart"
+      ></highcharts-chart>
+        <div class="chart-footer">
+          <button class="report-btn">View full report</button>
+        </div>
+      </div>
+  
+      <!-- Vendors Monitored -->
+      <div class="vendor-panel">
+        <div class="menu-dots">
+          <i class="fa-solid fa-ellipsis-vertical"></i>
+        </div>
+        <h4>Vendors monitored</h4>
+        <div class="subtext">You're using 80% of available spots.</div>
+  
+        <div class="half-donut-container">
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="chartOptionss"
+            class="half-donut-chart">
+          </highcharts-chart>
+        
+          <div class="chart-center">
+            <div class="main-value">240</div>
+            <div class="sub-value">80%</div>
+          </div>
+        </div>    
+        
+        <div class="limit-warning">
+          You've almost reached your limit
+          <span class="note">
+            You have used 80% of your available spots.<br />
+            Upgrade plan to monitor more vendors.
+          </span>
+        </div>
+        <div class="chart-footer">
+          <button class="upgrade-btn">Upgrade plan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
